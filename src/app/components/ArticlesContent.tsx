@@ -51,7 +51,7 @@ export default function ArticlesContent() {
         const articlesResponse = await axiosInstance.get<{
           data: Article[];
         }>(
-          "https://extra-brooke-yeremiadio-46b2183e.koyeb.app/api/articles?populate[category]=*"
+          "https://extra-brooke-yeremiadio-46b2183e.koyeb.app/api/articles?populate[category]=*",
         );
 
         const categoriesResponse = await axiosInstance.get<{
@@ -83,7 +83,7 @@ export default function ArticlesContent() {
 
   const paginatedArticles = articles.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   if (loading) {
@@ -117,7 +117,7 @@ export default function ArticlesContent() {
           (document.getElementById("swal-input3") as HTMLInputElement).value,
           parseInt(
             (document.getElementById("swal-input4") as HTMLSelectElement)
-              .value || "0"
+              .value || "0",
           ),
         ];
       },
@@ -148,7 +148,7 @@ export default function ArticlesContent() {
               cover_image_url,
               category: categoryId || null,
             },
-          }
+          },
         );
 
         const newArticle = response.data.data;
@@ -206,7 +206,7 @@ export default function ArticlesContent() {
           (document.getElementById("swal-input3") as HTMLInputElement).value,
           parseInt(
             (document.getElementById("swal-input4") as HTMLSelectElement)
-              .value || "0"
+              .value || "0",
           ),
         ];
       },
@@ -238,7 +238,7 @@ export default function ArticlesContent() {
                 cover_image_url,
                 category: categoryId || null,
               },
-            }
+            },
           );
 
           setArticles(
@@ -253,8 +253,8 @@ export default function ArticlesContent() {
                       ? categories.find((cat) => cat.id === categoryId) || null
                       : null,
                   }
-                : a
-            )
+                : a,
+            ),
           );
 
           Swal.fire({
@@ -325,7 +325,7 @@ export default function ArticlesContent() {
           });
 
           await axiosInstance.delete(
-            `https://extra-brooke-yeremiadio-46b2183e.koyeb.app/api/articles/${documentId}`
+            `https://extra-brooke-yeremiadio-46b2183e.koyeb.app/api/articles/${documentId}`,
           );
 
           setArticles(articles.filter((a) => a.documentId !== documentId));

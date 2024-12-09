@@ -46,7 +46,7 @@ export default function DashboardContent() {
         });
 
         const userResponse = await axiosInstance.get<{ username: string }>(
-          `${BASE_URL}/users/me`
+          `${BASE_URL}/users/me`,
         );
         setUser(userResponse.data.username);
 
@@ -75,7 +75,7 @@ export default function DashboardContent() {
             id: Number(id),
             name: category.name,
             articleCount: category.count,
-          })
+          }),
         );
 
         const commentsResponse = await axiosInstance.get<{
@@ -92,7 +92,7 @@ export default function DashboardContent() {
         }));
 
         setCategories(categoriesData);
-        setArticleComments(commentsData)
+        setArticleComments(commentsData);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
         setError("Failed to load dashboard data");

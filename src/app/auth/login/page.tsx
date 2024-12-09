@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,7 +22,7 @@ const LoginPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { isAuthenticated, loading, error } = useAppSelector(
-    (state) => state.auth
+    (state) => state.auth,
   );
 
   const {
@@ -45,7 +45,7 @@ const LoginPage: React.FC = () => {
         loginUser({
           identifier: data.email,
           password: data.password,
-        })
+        }),
       ).unwrap();
     } catch (err) {
       console.error("Login gagal", err);

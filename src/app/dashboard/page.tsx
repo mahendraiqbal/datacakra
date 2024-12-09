@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
-import React, { useEffect ,useState } from "react";import Sidebar from "../components/sidebar";
+import React, { useState } from "react";
+import Sidebar from "../components/sidebar";
 import DashboardContent from "../components/DashboardContent";
 import ArticlesContent from "../components/ArticlesContent";
 import CategoryContent from "../components/CategoryContent";
@@ -11,15 +12,6 @@ import ArticleView from "../components/ArticleView";
 
 export default function Dashboard() {
   const [activeContent, setActiveContent] = useState("dashboard");
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return null;
-  }
 
   const handleAddCategory = async () => {
     const { value: formValues } = await Swal.fire({
@@ -55,7 +47,7 @@ export default function Dashboard() {
 
         const response = await axiosInstance.post(
           "https://extra-brooke-yeremiadio-46b2183e.koyeb.app/api/categories",
-          { data: { name: formValues.name } }
+          { data: { name: formValues.name } },
         );
 
         Swal.fire({
@@ -82,7 +74,7 @@ export default function Dashboard() {
       case "category":
         return <CategoryContent />;
       case "articlesView":
-        return <ArticleView />
+        return <ArticleView />;
       default:
         return <DashboardContent />;
     }
@@ -100,7 +92,9 @@ export default function Dashboard() {
             <div className="bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-xl p-6 shadow-lg">
               <div className="flex items-center justify-between">
                 <div>
-                  <h1 className="text-5xl py-2 font-bold mb-1">This is Just Static</h1>
+                  <h1 className="text-5xl py-2 font-bold mb-1">
+                    `This is Just Static`
+                  </h1>
                   <h3 className="text-xl font-bold mb-2">Quick Stats</h3>
                   <p className="text-sm opacity-75">
                     Your performance overview

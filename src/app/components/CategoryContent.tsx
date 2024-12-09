@@ -42,7 +42,7 @@ export default function CategoryContent() {
       });
 
       const response = await axiosInstance.get<{ data: Category[] }>(
-        "https://extra-brooke-yeremiadio-46b2183e.koyeb.app/api/categories"
+        "https://extra-brooke-yeremiadio-46b2183e.koyeb.app/api/categories",
       );
       setCategories(response.data.data);
     } catch (err) {
@@ -86,7 +86,7 @@ export default function CategoryContent() {
 
         const response = await axiosInstance.post(
           "https://extra-brooke-yeremiadio-46b2183e.koyeb.app/api/categories",
-          { data: { name: categoryName } }
+          { data: { name: categoryName } },
         );
 
         Swal.fire({
@@ -143,7 +143,7 @@ export default function CategoryContent() {
 
         const response = await axiosInstance.put(
           `https://extra-brooke-yeremiadio-46b2183e.koyeb.app/api/categories/${category.documentId}`,
-          { data: { name: formValues } }
+          { data: { name: formValues } },
         );
 
         Swal.fire({
@@ -156,8 +156,8 @@ export default function CategoryContent() {
           prevCategories.map((cat) =>
             cat.id === category.id
               ? { ...cat, name: response.data.data.name }
-              : cat
-          )
+              : cat,
+          ),
         );
       } catch (error) {
         Swal.fire({
@@ -199,7 +199,7 @@ export default function CategoryContent() {
         });
 
         await axiosInstance.delete(
-          `https://extra-brooke-yeremiadio-46b2183e.koyeb.app/api/categories/${category.documentId}`
+          `https://extra-brooke-yeremiadio-46b2183e.koyeb.app/api/categories/${category.documentId}`,
         );
 
         Swal.fire({
@@ -209,7 +209,7 @@ export default function CategoryContent() {
         });
 
         setCategories((prevCategories) =>
-          prevCategories.filter((cat) => cat.id !== category.id)
+          prevCategories.filter((cat) => cat.id !== category.id),
         );
       } catch (error) {
         Swal.fire({
@@ -224,7 +224,7 @@ export default function CategoryContent() {
   const totalPages = Math.ceil(categories.length / itemsPerPage);
   const currentCategories = categories.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   return (

@@ -32,7 +32,7 @@ const RegisterPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { isAuthenticated, loading, error } = useAppSelector(
-    (state) => state.auth
+    (state) => state.auth,
   );
 
   const {
@@ -56,7 +56,7 @@ const RegisterPage: React.FC = () => {
           username: data.username,
           email: data.email,
           password: data.password,
-        })
+        }),
       ).unwrap();
     } catch (err) {
       console.error("Username atau Email sudah Digunakan", err);

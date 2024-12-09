@@ -25,12 +25,12 @@ export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (
     credentials: { identifier: string; password: string },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const response = await axios.post(
         "https://extra-brooke-yeremiadio-46b2183e.koyeb.app/api/auth/local",
-        credentials
+        credentials,
       );
 
       localStorage.setItem("token", response.data.jwt);
@@ -40,21 +40,23 @@ export const loginUser = createAsyncThunk(
         token: response.data.jwt,
       };
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || "Username atau Password Salah");
+      return rejectWithValue(
+        error.response?.data?.message || "Username atau Password Salah",
+      );
     }
-  }
+  },
 );
 
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (
     userData: { email: string; password: string; username: string },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const response = await axios.post(
         "https://extra-brooke-yeremiadio-46b2183e.koyeb.app/api/auth/local/register",
-        userData
+        userData,
       );
 
       return {
@@ -63,10 +65,10 @@ export const registerUser = createAsyncThunk(
       };
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || "Username atau Email sudah digunakan"
+        error.response?.data?.message || "Username atau Email sudah digunakan",
       );
     }
-  }
+  },
 );
 
 export const logoutUser = createAsyncThunk(
@@ -81,7 +83,7 @@ export const logoutUser = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || "Logout gagal");
     }
-  }
+  },
 );
 
 const authSlice = createSlice({
