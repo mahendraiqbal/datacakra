@@ -3,6 +3,7 @@ import { MessageCircle, User, Calendar, Edit, Trash } from "lucide-react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import Image from "next/image";
+import dummyImage from "../../../public/dummy-mount.png"
 
 interface Comment {
   id: number;
@@ -215,7 +216,7 @@ const ArticleView: React.FC = () => {
             className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden mb-8"
           >
             <Image
-              src={article.cover_image_url}
+              src={article.cover_image_url || dummyImage}
               alt={article.title}
               className="w-full h-72 object-cover"
               height={72}
