@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
-import { CSSTransition } from "react-transition-group";
+import React, { useRef, useState, useEffect, RefObject } from "react";
 import {
   Disclosure,
   DisclosureButton,
@@ -23,9 +22,9 @@ function classNames(...classes: string[]) {
 }
 
 export default function ModernLandingPage() {
-  const descriptionRef = useRef(null);
-  const storiesRef = useRef(null);
-  const reviewsRef = useRef(null);
+  const descriptionRef = useRef<HTMLElement | null>(null);
+  const storiesRef = useRef<HTMLElement | null>(null);
+  const reviewsRef = useRef<HTMLElement | null>(null);
   const [activeSection, setActiveSection] = useState("description");
   const [sectionVisibility, setSectionVisibility] = useState({
     description: false,
@@ -33,18 +32,16 @@ export default function ModernLandingPage() {
     reviews: false,
   });
 
-  const scrollToSection = (sectionRef) => {
-    navigation.forEach((item) => {
-      item.current = item.href === sectionRef.current.id;
-    });
-
-    const sectionId = sectionRef.current.id;
-    setActiveSection(sectionId);
-
-    sectionRef.current.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+  const scrollToSection = (sectionRef: React.RefObject<HTMLElement | null>) => {
+    if (sectionRef.current) {
+      const sectionId = sectionRef.current.id;
+      setActiveSection(sectionId);
+  
+      sectionRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
   };
 
   useEffect(() => {
