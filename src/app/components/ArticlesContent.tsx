@@ -37,33 +37,27 @@ export default function ArticlesContent() {
 
   const totalPages = Math.ceil(articles.length / itemsPerPage);
 
-  // Fetch Articles and Categories
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Get token from localStorage
         const token = localStorage.getItem("token");
 
-        // Create axios instance with authorization header
         const axiosInstance = axios.create({
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        // Fetch articles with category population
         const articlesResponse = await axiosInstance.get<{
           data: Article[];
         }>(
           "https://extra-brooke-yeremiadio-46b2183e.koyeb.app/api/articles?populate[category]=*"
         );
 
-        // Fetch categories
         const categoriesResponse = await axiosInstance.get<{
           data: Category[];
         }>("https://extra-brooke-yeremiadio-46b2183e.koyeb.app/api/categories");
 
-        // Set articles and categories from the response data
         setArticles(articlesResponse.data.data);
         setCategories(categoriesResponse.data.data);
         setLoading(false);
@@ -100,7 +94,6 @@ export default function ArticlesContent() {
     );
   }
 
-  // Add Article Handler
   const handleAddArticle = async () => {
     const { value: formValues, isDismissed } = await Swal.fire({
       title: "Add New Article",
@@ -130,17 +123,14 @@ export default function ArticlesContent() {
       },
     });
 
-    // Check if the user cancelled the dialog
     if (isDismissed) {
       return;
     }
 
     if (formValues) {
       try {
-        // Get token from localStorage
         const token = localStorage.getItem("token");
 
-        // Create axios instance with authorization header
         const axiosInstance = axios.create({
           headers: {
             Authorization: `Bearer ${token}`,
@@ -161,10 +151,8 @@ export default function ArticlesContent() {
           }
         );
 
-        // Assuming the response contains the newly created article
         const newArticle = response.data.data;
 
-        // Update local state
         setArticles([
           ...articles,
           {
@@ -191,7 +179,6 @@ export default function ArticlesContent() {
     }
   };
 
-  // Edit Article Handler
   const handleEditArticle = async (documentId: string) => {
     const article = articles.find((a) => a.documentId === documentId);
 
@@ -225,17 +212,14 @@ export default function ArticlesContent() {
       },
     });
 
-    // Check if the user cancelled the dialog
     if (isDismissed) {
       return;
     }
 
     if (formValues) {
       try {
-        // Get token from localStorage
         const token = localStorage.getItem("token");
 
-        // Create axios instance with authorization header
         const axiosInstance = axios.create({
           headers: {
             Authorization: `Bearer ${token}`,
@@ -243,16 +227,6 @@ export default function ArticlesContent() {
         });
 
         const [title, description, cover_image_url, categoryId] = formValues;
-
-        // Log the payload for debugging
-        console.log("Update Payload:", {
-          data: {
-            title,
-            description,
-            cover_image_url,
-            category: categoryId || null,
-          },
-        });
 
         try {
           const response = await axiosInstance.put(
@@ -267,10 +241,6 @@ export default function ArticlesContent() {
             }
           );
 
-          // Log the full response for debugging
-          console.log("Update Response:", response);
-
-          // Update local state
           setArticles(
             articles.map((a) =>
               a.documentId === documentId
@@ -293,13 +263,9 @@ export default function ArticlesContent() {
             text: "The article has been successfully updated.",
           });
         } catch (error: any) {
-          // More detailed error handling
           console.error("Full error object:", error);
 
-          // Check if error response exists
           if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
             console.error("Error response data:", error.response.data);
             console.error("Error response status:", error.response.status);
             console.error("Error response headers:", error.response.headers);

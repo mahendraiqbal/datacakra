@@ -1,8 +1,7 @@
-// app/providers.tsx
-"use client"; // Pastikan file ini berjalan di sisi client
+"use client"; 
 
 import { Provider } from "react-redux";
-import { store } from "../redux/store"; // Pastikan store Redux Anda sudah dibuat
+import { store } from "../redux/store"; 
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return <Provider store={store}>{children}</Provider>;

@@ -19,7 +19,6 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>;
 
 const LoginPage: React.FC = () => {
-  // Use typed dispatch and selector
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { isAuthenticated, loading, error } = useAppSelector(
@@ -34,14 +33,12 @@ const LoginPage: React.FC = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  // Redirect jika sudah login
   useEffect(() => {
     if (isAuthenticated) {
       router.push("/dashboard");
     }
   }, [isAuthenticated, router]);
 
-  // Handler submit form
   const onSubmit = async (data: LoginFormData) => {
     try {
       const result = await dispatch(
@@ -51,7 +48,6 @@ const LoginPage: React.FC = () => {
         })
       ).unwrap();
     } catch (err) {
-      // Error handling sudah ditangani di slice
       console.error("Login gagal", err);
     }
   };
@@ -64,7 +60,6 @@ const LoginPage: React.FC = () => {
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          {/* Pesan error global */}
           {error && (
             <div
               className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
@@ -74,7 +69,6 @@ const LoginPage: React.FC = () => {
             </div>
           )}
 
-          {/* Input Email */}
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="email" className="sr-only">
@@ -94,7 +88,6 @@ const LoginPage: React.FC = () => {
               )}
             </div>
 
-            {/* Input Password */}
             <div>
               <label htmlFor="password" className="sr-only">
                 Password
@@ -114,7 +107,6 @@ const LoginPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Tombol Submit */}
           <div>
             <button
               type="submit"
@@ -125,7 +117,6 @@ const LoginPage: React.FC = () => {
             </button>
           </div>
 
-          {/* Link Registrasi */}
           <div className="text-center">
             <p className="mt-2 text-sm text-gray-600">
               Belum punya akun?{" "}

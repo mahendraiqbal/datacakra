@@ -60,9 +60,14 @@ export default function Sidebar({ onMenuClick }: SidebarProps) {
                 menu: "dashboard",
               },
               {
-                name: "Articles",
+                name: "Article List",
                 icon: FileText,
                 menu: "articles",
+              },
+              {
+                name: "Article View",
+                icon: FileText,
+                menu: "articlesView",
               },
               {
                 name: "Category",

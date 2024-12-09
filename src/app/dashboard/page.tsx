@@ -8,6 +8,7 @@ import CategoryContent from "../components/CategoryContent";
 import { Rocket, TrendingUp, Zap } from "lucide-react";
 import Swal from "sweetalert2";
 import axios from "axios";
+import ArticleView from "../components/ArticleView";
 
 export default function Dashboard() {
   const [activeContent, setActiveContent] = useState("dashboard");
@@ -72,6 +73,8 @@ export default function Dashboard() {
         return <ArticlesContent />;
       case "category":
         return <CategoryContent />;
+      case "articlesView":
+        return <ArticleView />
       default:
         return <DashboardContent />;
     }
@@ -83,15 +86,13 @@ export default function Dashboard() {
 
       <main className="flex-1 p-6 bg-white">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main Content Area */}
           <div className="lg:col-span-2">{renderContent()}</div>
 
-          {/* Additional Sections */}
           <div className="space-y-6">
-            {/* Quick Stats Card */}
             <div className="bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-xl p-6 shadow-lg">
               <div className="flex items-center justify-between">
                 <div>
+                  <h1 className="text-5xl py-2 font-bold mb-1">This is Just Static</h1>
                   <h3 className="text-xl font-bold mb-2">Quick Stats</h3>
                   <p className="text-sm opacity-75">
                     Your performance overview
@@ -111,7 +112,6 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Trending Section */}
             <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-md">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-bold text-gray-800">Trending</h3>
@@ -136,7 +136,6 @@ export default function Dashboard() {
               </ul>
             </div>
 
-            {/* Quick Actions */}
             <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-md">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-bold text-gray-800">

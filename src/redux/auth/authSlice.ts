@@ -40,7 +40,7 @@ export const loginUser = createAsyncThunk(
         token: response.data.jwt,
       };
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || "Login gagal");
+      return rejectWithValue(error.response?.data?.message || "Username atau Password Salah");
     }
   }
 );
@@ -63,7 +63,7 @@ export const registerUser = createAsyncThunk(
       };
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || "Registrasi gagal"
+        error.response?.data?.message || "Username atau Email sudah digunakan"
       );
     }
   }
@@ -98,7 +98,6 @@ const authSlice = createSlice({
       state.error = null;
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
-      console.log("Login berhasil:", action.payload);
       state.loading = false;
       state.user = action.payload.user;
       state.token = action.payload.token;

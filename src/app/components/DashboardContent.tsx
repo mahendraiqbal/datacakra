@@ -10,22 +10,13 @@ interface Category {
   articleCount: number;
 }
 
-export interface Article {
+interface Article {
   id: number;
   title: string;
-  category?: Category;
-}
-
-export interface UserResponse {
-  username: string;
-}
-
-export interface ArticlesResponse {
-  data: Article[];
-}
-
-export interface CategoriesResponse {
-  data: Category[];
+  category: {
+    id: number;
+    name: string;
+  } | null;
 }
 
 export default function DashboardContent() {
@@ -33,9 +24,19 @@ export default function DashboardContent() {
   const [articleCount, setArticleCount] = useState<number>(0);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const [articleComments, setArticleComments] = useState<
+    { title: string; commentCount: number }[]
+  >([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const BASE_URL = "https://extra-brooke-yeremiadio-46b2183e.koyeb.app/api";
 
   useEffect(() => {
     const fetchDashboardData = async () => {
+      setIsLoading(true);
+      setError(null);
+
       try {
         const token = localStorage.getItem("token");
         const axiosInstance = axios.create({
@@ -45,44 +46,139 @@ export default function DashboardContent() {
         });
 
         const userResponse = await axiosInstance.get<{ username: string }>(
-          "https://extra-brooke-yeremiadio-46b2183e.koyeb.app/api/users/me"
+          `${BASE_URL}/users/me`
         );
         setUser(userResponse.data.username);
 
         const articlesResponse = await axiosInstance.get<{
-          data: any[];
-          count: number;
-        }>("https://extra-brooke-yeremiadio-46b2183e.koyeb.app/api/articles");
+          data: Article[];
+        }>(`${BASE_URL}/articles?populate[category]=*`);
         setArticleCount(articlesResponse.data.data.length);
 
-        const categoriesResponse = await axiosInstance.get<{
-          data: Category[];
-        }>("https://extra-brooke-yeremiadio-46b2183e.koyeb.app/api/categories");
+        const categoryCounts: Record<number, { name: string; count: number }> =
+          {};
 
-        const categoriesData = categoriesResponse.data.data.map((category) => {
-          const articleCount = articlesResponse.data.data.filter(
-            (article) => article.category?.id === category.id
-          ).length;
-          return { ...category, articleCount };
+        articlesResponse.data.data.forEach((article) => {
+          if (article.category) {
+            if (!categoryCounts[article.category.id]) {
+              categoryCounts[article.category.id] = {
+                name: article.category.name,
+                count: 0,
+              };
+            }
+            categoryCounts[article.category.id].count += 1;
+          }
         });
 
+        const categoriesData = Object.entries(categoryCounts).map(
+          ([id, category]) => ({
+            id: Number(id),
+            name: category.name,
+            articleCount: category.count,
+          })
+        );
+
+        const commentsResponse = await axiosInstance.get<{
+          data: {
+            id: number;
+            title: string;
+            comments: { id: number }[];
+          }[];
+        }>(`${BASE_URL}/articles?populate=*`);
+
+        const commentsData = commentsResponse.data.data.map((article) => ({
+          title: article.title,
+          commentCount: article.comments.length,
+        }));
+
         setCategories(categoriesData);
+        setArticleComments(commentsData)
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
+        setError("Failed to load dashboard data");
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchDashboardData();
   }, []);
 
-  const chartOptions = {
+  const chartOptions: ApexOptions = {
     chart: {
       type: "pie",
     },
     labels: categories.map((category) => category.name),
+    colors: ["#4285F4", "#34A853", "#FBBC05", "#FF5722", "#9C27B0", "#2196F3"],
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 300,
+          },
+        },
+      },
+    ],
+    legend: {
+      position: "bottom",
+    },
   };
 
   const chartSeries = categories.map((category) => category.articleCount);
+
+  const barChartOptions: ApexOptions = {
+    chart: {
+      type: "bar",
+      toolbar: {
+        show: false,
+      },
+    },
+    xaxis: {
+      categories: articleComments.map((article) => article.title),
+      labels: {
+        style: {
+          colors: "#FFFFFF",
+        },
+      },
+    },
+    yaxis: {
+      labels: {
+        style: {
+          colors: "#FFFFFF",
+        },
+      },
+    },
+    colors: ["#34A853"],
+    legend: {
+      labels: {
+        colors: "#FFFFFF",
+      },
+    },
+  };
+
+  const barChartSeries = [
+    {
+      name: "Comments",
+      data: articleComments.map((article) => article.commentCount),
+    },
+  ];
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-900 to-indigo-900 flex items-center justify-center">
+        <div className="text-white text-2xl">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-red-900 to-red-700 flex items-center justify-center">
+        <div className="text-white text-2xl text-center">{error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 to-indigo-900 text-white font-sans rounded-lg">
@@ -97,7 +193,6 @@ export default function DashboardContent() {
         </header>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {/* User Card */}
           <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-xl transition transform hover:scale-105">
             <div className="flex items-center space-x-4">
               <User className="text-blue-300" size={40} />
@@ -110,7 +205,6 @@ export default function DashboardContent() {
             </div>
           </div>
 
-          {/* Articles Card */}
           <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-xl transition transform hover:scale-105">
             <div className="flex items-center space-x-4">
               <FileText className="text-green-300" size={40} />
@@ -125,7 +219,6 @@ export default function DashboardContent() {
             </div>
           </div>
 
-          {/* Categories Card */}
           <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-xl transition transform hover:scale-105">
             <div className="flex items-center space-x-4">
               <Layers className="text-purple-300" size={40} />
@@ -165,17 +258,42 @@ export default function DashboardContent() {
           </div>
         </div>
 
-        {/* Grafik Distribusi Artikel */}
         <div className="mt-8 bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-xl">
-          <h2 className="text-xl font-bold mb-4">
+          <h2 className="text-xl font-bold mb-4 text-white">
             Article Distribution by Category
           </h2>
-          <Chart
-            options={chartOptions}
-            series={chartSeries}
-            type="pie"
-            width="400"
-          />
+          {categories.length > 0 ? (
+            <Chart
+              options={chartOptions}
+              series={chartSeries}
+              type="pie"
+              width="100%"
+              height={350}
+            />
+          ) : (
+            <div className="text-center py-8 text-blue-200">
+              No categories found
+            </div>
+          )}
+        </div>
+
+        <div className="mt-8 bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-xl">
+          <h2 className="text-xl font-bold mb-4 text-white">
+            Comments Distribution by Article
+          </h2>
+          {articleComments.length > 0 ? (
+            <Chart
+              options={barChartOptions}
+              series={barChartSeries}
+              type="bar"
+              width="100%"
+              height={350}
+            />
+          ) : (
+            <div className="text-center py-8 text-blue-200">
+              No comments found
+            </div>
+          )}
         </div>
       </div>
     </div>

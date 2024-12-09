@@ -18,7 +18,7 @@ const navigation = [
   { name: "Reviews", href: "reviews", current: false },
 ];
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
@@ -84,7 +84,6 @@ export default function ModernLandingPage() {
         as="nav"
         className="bg-gradient-to-r from-blue-900 to-indigo-900 sticky top-0 z-50 shadow-lg"
       >
-        {/* Navbar code remains the same as original */}
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-16 items-center justify-between">
             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -182,7 +181,6 @@ export default function ModernLandingPage() {
       </Disclosure>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Landing Image Section */}
         <div className="relative py-12">
           <div className="relative overflow-hidden rounded-2xl shadow-2xl animate-fade-in">
             <Image
@@ -199,7 +197,6 @@ export default function ModernLandingPage() {
           </div>
         </div>
 
-        {/* Description Section */}
         <section
           ref={descriptionRef}
           id="description"
@@ -236,7 +233,6 @@ export default function ModernLandingPage() {
           </div>
         </section>
 
-        {/* Stories Section */}
         <section
           ref={storiesRef}
           id="stories"
@@ -276,7 +272,6 @@ export default function ModernLandingPage() {
           </div>
         </section>
 
-        {/* Reviews Section */}
         <section
           ref={reviewsRef}
           id="reviews"

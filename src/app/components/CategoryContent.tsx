@@ -19,7 +19,7 @@ export default function CategoryContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4; // Jumlah card per halaman
+  const itemsPerPage = 4;
 
   useEffect(() => {
     fetchCategories();
@@ -280,7 +280,6 @@ export default function CategoryContent() {
         </div>
       )}
 
-      {/* Pagination */}
       <div className="flex justify-center mt-6">
         {Array.from({ length: totalPages }, (_, index) => (
           <button

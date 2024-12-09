@@ -8,7 +8,6 @@ import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { registerUser } from "../../../redux/auth/authSlice";
 import Link from "next/link";
 
-// Skema validasi registrasi
 const registerSchema = z
   .object({
     username: z
@@ -44,14 +43,12 @@ const RegisterPage: React.FC = () => {
     resolver: zodResolver(registerSchema),
   });
 
-  // Redirect jika sudah login
   useEffect(() => {
     if (isAuthenticated) {
-      router.push("/dashboard");
+      router.push("/auth/login");
     }
   }, [isAuthenticated, router]);
 
-  // Handler submit form
   const onSubmit = async (data: RegisterFormData) => {
     try {
       await dispatch(
@@ -62,7 +59,7 @@ const RegisterPage: React.FC = () => {
         })
       ).unwrap();
     } catch (err) {
-      console.error("Registrasi gagal", err);
+      console.error("Username atau Email sudah Digunakan", err);
     }
   };
 
@@ -75,7 +72,6 @@ const RegisterPage: React.FC = () => {
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          {/* Pesan error global */}
           {error && (
             <div
               className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
@@ -85,7 +81,6 @@ const RegisterPage: React.FC = () => {
             </div>
           )}
 
-          {/* Input Nama */}
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="name" className="sr-only">
@@ -105,7 +100,6 @@ const RegisterPage: React.FC = () => {
               )}
             </div>
 
-            {/* Input Email */}
             <div>
               <label htmlFor="email" className="sr-only">
                 Email
@@ -124,7 +118,6 @@ const RegisterPage: React.FC = () => {
               )}
             </div>
 
-            {/* Input Password */}
             <div>
               <label htmlFor="password" className="sr-only">
                 Password
@@ -143,7 +136,6 @@ const RegisterPage: React.FC = () => {
               )}
             </div>
 
-            {/* Input Konfirmasi Password */}
             <div>
               <label htmlFor="confirmPassword" className="sr-only">
                 Konfirmasi Password
@@ -163,7 +155,6 @@ const RegisterPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Tombol Submit */}
           <div>
             <button
               type="submit"
@@ -174,7 +165,6 @@ const RegisterPage: React.FC = () => {
             </button>
           </div>
 
-          {/* Link Login */}
           <div className="text-center">
             <p className="mt-2 text-sm text-gray-600">
               Sudah punya akun?{" "}
