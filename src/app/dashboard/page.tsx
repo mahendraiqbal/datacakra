@@ -1,7 +1,6 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Sidebar from "../components/sidebar";
+import React, { useEffect ,useState } from "react";import Sidebar from "../components/sidebar";
 import DashboardContent from "../components/DashboardContent";
 import ArticlesContent from "../components/ArticlesContent";
 import CategoryContent from "../components/CategoryContent";
@@ -12,6 +11,15 @@ import ArticleView from "../components/ArticleView";
 
 export default function Dashboard() {
   const [activeContent, setActiveContent] = useState("dashboard");
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null;
+  }
 
   const handleAddCategory = async () => {
     const { value: formValues } = await Swal.fire({
